@@ -1,9 +1,37 @@
-<header>
-  <h1>Bus Schedule Lounge</h1>
-  <nav>
-    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-    <a routerLink="/schedules" routerLinkActive="active">Schedules</a>
-    <a routerLink="/lounge" routerLinkActive="active">Lounge</a>
-    <a routerLink="/login" routerLinkActive="active">Login</a>
+<div class="app-header">
+  <div class="top-bar">
+    <div class="logo-section">
+      <div class="logo">🚌</div>
+      <h1 class="app-name">Bus Schedule Lounge</h1>
+    </div>
+    <div class="time-display">
+      <div class="live-time">{{ currentTime }}</div>
+      <div class="live-date">{{ currentDate }}</div>
+    </div>
+  </div>
+
+  <nav class="nav-bar">
+    <div class="nav-tabs">
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-tab">
+        <span class="icon">📊</span>
+        <span class="label">Dashboard</span>
+      </a>
+      <a routerLink="/departures" routerLinkActive="active" class="nav-tab">
+        <span class="icon">🚌</span>
+        <span class="label">Departure Management</span>
+      </a>
+      <a routerLink="/arrivals" routerLinkActive="active" class="nav-tab">
+        <span class="icon">📥</span>
+        <span class="label">Arrival Management</span>
+      </a>
+      <a routerLink="/advertisements" routerLinkActive="active" class="nav-tab">
+        <span class="icon">📢</span>
+        <span class="label">Advertisement Management</span>
+      </a>
+      <a routerLink="/settings" routerLinkActive="active" class="nav-tab">
+        <span class="icon">⚙️</span>
+        <span class="label">Setting</span>
+      </a>
+    </div>
   </nav>
-</header>
+</div>

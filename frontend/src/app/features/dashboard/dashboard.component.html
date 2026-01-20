@@ -1,0 +1,197 @@
+<div class="dashboard-page">
+  <app-header></app-header>
+
+  <div class="dashboard-content">
+    <section class="stats-cards">
+    <div class="stat-card">
+      <div class="stat-label">Today<br>Departure</div>
+      <div class="stat-value">30</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Today<br>Arrivals</div>
+      <div class="stat-value">20</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Delayed<br>Arrivals</div>
+      <div class="stat-value">01</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Delayed<br>Departures</div>
+      <div class="stat-value">01</div>
+    </div>
+  </section>
+
+  <div class="page-title">Departure Management</div>
+
+  <div class="search-container">
+    <input type="text" class="search-input" placeholder="Search Departures for lounge...............">
+  </div>
+
+  <div class="lounges-container">
+    <!-- COLOMBO PREMIUM LOUNGE -->
+    <section class="lounge-section">
+      <h2 class="lounge-title">COLOMBO PREMIUM LOUNGE</h2>
+      <div class="table-wrapper">
+        <table class="departures-table">
+          <thead>
+            <tr>
+              <th>TIME</th>
+              <th>BUS NO</th>
+              <th>Route Number</th>
+              <th>DESTINATION</th>
+              <th>REMARKS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>13:05</td>
+              <td>B-102</td>
+              <td>R-245</td>
+              <td>Kandy</td>
+              <td><span class="status departed">DEPARTED</span></td>
+            </tr>
+            <tr class="active-row">
+              <td><span class="indicator"></span>13:20</td>
+              <td>B-505</td>
+              <td>R-187</td>
+              <td>Anuradhapura</td>
+              <td><span class="status checkin">CHECK IN</span></td>
+            </tr>
+            <tr>
+              <td><span class="indicator"></span>13:45</td>
+              <td>B-210</td>
+              <td>R-332</td>
+              <td>Galle</td>
+              <td><span class="status delay">DELAY 10M</span></td>
+            </tr>
+            <tr>
+              <td><span class="indicator"></span>13:55</td>
+              <td>B-330</td>
+              <td>R-156</td>
+              <td>Matara</td>
+              <td><span class="status ontime">ON TIME</span></td>
+            </tr>
+            <tr>
+              <td>14:10</td>
+              <td>B-404</td>
+              <td>R-098</td>
+              <td>Jaffna</td>
+              <td><span class="status ontime">ON TIME</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- DMM LOUNGE -->
+    <section class="lounge-section">
+      <h2 class="lounge-title">DMM LOUNGE</h2>
+      <div class="table-wrapper">
+        <table class="departures-table">
+          <thead>
+            <tr>
+              <th>TIME</th>
+              <th>BUS NO</th>
+              <th>Route Number</th>
+              <th>DESTINATION</th>
+              <th>REMARKS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>13:05</td>
+              <td>B-102</td>
+              <td>R-245</td>
+              <td>Kandy</td>
+              <td><span class="status departed">DEPARTED</span></td>
+            </tr>
+            <tr class="active-row">
+              <td><span class="indicator"></span>13:20</td>
+              <td>B-505</td>
+              <td>R-187</td>
+              <td>Anuradhapura</td>
+              <td><span class="status checkin">CHECK IN</span></td>
+            </tr>
+            <tr>
+              <td><span class="indicator"></span>13:45</td>
+              <td>B-210</td>
+              <td>R-332</td>
+              <td>Galle</td>
+              <td><span class="status delay">DELAY 10M</span></td>
+            </tr>
+            <tr>
+              <td><span class="indicator"></span>13:55</td>
+              <td>B-330</td>
+              <td>R-156</td>
+              <td>Matara</td>
+              <td><span class="status ontime">ON TIME</span></td>
+            </tr>
+            <tr>
+              <td>14:10</td>
+              <td>B-404</td>
+              <td>R-098</td>
+              <td>Jaffna</td>
+              <td><span class="status ontime">ON TIME</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ARALIYA LOUNGE -->
+    <section class="lounge-section">
+      <h2 class="lounge-title">ARALIYA LOUNGE</h2>
+      <div class="table-wrapper">
+        <table class="departures-table">
+          <thead>
+            <tr>
+              <th>TIME</th>
+              <th>BUS NO</th>
+              <th>Route Number</th>
+              <th>DESTINATION</th>
+              <th>REMARKS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>13:05</td>
+              <td>B-102</td>
+              <td>R-245</td>
+              <td>Kandy</td>
+              <td><span class="status departed">DEPARTED</span></td>
+            </tr>
+            <tr class="active-row">
+              <td><span class="indicator"></span>13:20</td>
+              <td>B-505</td>
+              <td>R-187</td>
+              <td>Anuradhapura</td>
+              <td><span class="status checkin">CHECK IN</span></td>
+            </tr>
+            <tr>
+              <td><span class="indicator"></span>13:45</td>
+              <td>B-210</td>
+              <td>R-332</td>
+              <td>Galle</td>
+              <td><span class="status delay">DELAY 10M</span></td>
+            </tr>
+            <tr>
+              <td><span class="indicator"></span>13:55</td>
+              <td>B-330</td>
+              <td>R-156</td>
+              <td>Matara</td>
+              <td><span class="status ontime">ON TIME</span></td>
+            </tr>
+            <tr>
+              <td>14:10</td>
+              <td>B-404</td>
+              <td>R-098</td>
+              <td>Jaffna</td>
+              <td><span class="status ontime">ON TIME</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+  </div>
+</div>
