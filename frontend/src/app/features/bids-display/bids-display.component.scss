@@ -1,0 +1,237 @@
+// BIDS Display - Dark Mode
+
+.bids-display {
+  min-height: 100vh;
+  background: #0a1929;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  background: #0d2847;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid #1e88e5;
+
+  .header-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 1px;
+  }
+
+  .header-time {
+    text-align: right;
+
+    .date {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      margin-bottom: 4px;
+    }
+
+    .time {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 1px;
+    }
+  }
+}
+
+.content {
+  flex: 1;
+  padding: 30px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.section {
+  .section-header {
+    background: #1e88e5;
+    color: #ffffff;
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    border-radius: 4px 4px 0 0;
+  }
+
+  .table-wrapper {
+    background: #0d2847;
+    border-radius: 0 0 4px 4px;
+    overflow: hidden;
+  }
+}
+
+.schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+
+  thead {
+    background: #154569;
+
+    th {
+      padding: 14px 20px;
+      text-align: left;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid #1e88e5;
+
+      &:nth-child(1) { width: 12%; } // TIME
+      &:nth-child(2) { width: 13%; } // BUS NO
+      &:nth-child(3) { width: 15%; } // ROUTE NUMBER
+      &:nth-child(4) { width: 30%; } // DESTINATION/ORIGIN
+      &:nth-child(5) { width: 30%; } // REMARKS
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid #1a3a52;
+      transition: background 0.2s ease;
+
+      &:hover {
+        background: #122e47;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &.has-indicator {
+        td:first-child {
+          position: relative;
+        }
+      }
+
+      td {
+        padding: 6px 20px;
+        color: #ffffff;
+        font-size: 1rem;
+        font-weight: 500;
+
+        .indicator {
+          color: #22c55e;
+          font-size: 0.8rem;
+          margin-right: 8px;
+          animation: pulse 2s infinite;
+        }
+      }
+    }
+  }
+}
+
+.remark {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+
+  &.departed {
+    color: #94a3b8;
+  }
+
+  &.checkin {
+    color: #f59e0b;
+  }
+
+  &.delay {
+    color: #ef4444;
+  }
+
+  &.ontime {
+    color: #22c55e;
+  }
+
+  &.arrived {
+    color: #22c55e;
+  }
+
+  &.expected {
+    color: #22c55e;
+  }
+
+  &.delayed {
+    color: #ef4444;
+  }
+}
+
+.footer {
+  background: #1e88e5;
+  padding: 20px 40px;
+  text-align: center;
+
+  .footer-text {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 2px;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 15px 20px;
+    flex-direction: column;
+    gap: 10px;
+
+    .header-title {
+      font-size: 1.3rem;
+    }
+
+    .header-time {
+      text-align: center;
+
+      .time {
+        font-size: 1.5rem;
+      }
+    }
+  }
+
+  .content {
+    padding: 20px 15px;
+    gap: 20px;
+  }
+
+  .section {
+    .section-header {
+      padding: 10px 15px;
+      font-size: 1rem;
+    }
+  }
+
+  .schedule-table {
+    thead th {
+      padding: 10px 12px;
+      font-size: 0.75rem;
+    }
+
+    tbody td {
+      padding: 12px;
+      font-size: 0.85rem;
+    }
+  }
+
+  .footer {
+    padding: 15px 20px;
+
+    .footer-text {
+      font-size: 1rem;
+    }
+  }
+}

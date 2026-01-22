@@ -1,0 +1,79 @@
+<div class="bids-display">
+  <div class="header">
+    <div class="header-title">{{ loungeName.toUpperCase() }}</div>
+    <div class="header-time">
+      <div class="date">{{ currentDate }}</div>
+      <div class="time">{{ currentTime }}</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Departures Section -->
+    <div class="section departures-section">
+      <div class="section-header">DEPARTURES</div>
+      <div class="table-wrapper">
+        <table class="schedule-table">
+          <thead>
+            <tr>
+              <th>TIME</th>
+              <th>BUS NO</th>
+              <th>ROUTE NUMBER</th>
+              <th>DESTINATION</th>
+              <th>REMARKS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dep of departures" [class.has-indicator]="dep.indicator">
+              <td>
+                <span class="indicator" *ngIf="dep.indicator">●</span>
+                {{ dep.time }}
+              </td>
+              <td>{{ dep.busNo }}</td>
+              <td>{{ dep.routeNo }}</td>
+              <td>{{ dep.destination }}</td>
+              <td>
+                <span class="remark" [ngClass]="dep.status">{{ dep.remarks }}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Arrivals Section -->
+    <div class="section arrivals-section">
+      <div class="section-header">ARRIVALS</div>
+      <div class="table-wrapper">
+        <table class="schedule-table">
+          <thead>
+            <tr>
+              <th>TIME</th>
+              <th>BUS NO</th>
+              <th>ROUTE NUMBER</th>
+              <th>ORIGIN</th>
+              <th>REMARKS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let arr of arrivals" [class.has-indicator]="arr.indicator">
+              <td>
+                <span class="indicator" *ngIf="arr.indicator">●</span>
+                {{ arr.time }}
+              </td>
+              <td>{{ arr.busNo }}</td>
+              <td>{{ arr.routeNo }}</td>
+              <td>{{ arr.origin }}</td>
+              <td>
+                <span class="remark" [ngClass]="arr.status">{{ arr.remarks }}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-text">MAKE HAPPY JOURNEYS</div>
+  </div>
+</div>

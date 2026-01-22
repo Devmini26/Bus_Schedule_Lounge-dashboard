@@ -1,0 +1,44 @@
+<div class="dashboard-page">
+  <app-header></app-header>
+
+  <div class="dashboard-content">
+    <div class="page-title">Bus Schedule & Advertising</div>
+
+    <div class="search-container">
+      <input type="text" class="search-input" placeholder="Search Advertisments..................">
+    </div>
+
+    <div class="lounge-container">
+      <section class="lounge-section">
+        <div class="table-wrapper">
+          <table class="lounge-table">
+            <thead>
+              <tr>
+                <th>LOUNGE ID</th>
+                <th>LOUNGE NAME</th>
+                <th>DISTRICT</th>
+                <th>LOUNGE GROUPS</th>
+                <th>BUS SCHEDULES</th>
+                <th>ADVERTISMENTS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let lounge of lounges">
+                <td>{{ lounge.id }}</td>
+                <td>{{ lounge.name }}</td>
+                <td>{{ lounge.district }}</td>
+                <td>{{ lounge.groups }}</td>
+                <td>
+                  <button class="btn-schedule" (click)="viewSchedules(lounge)">VIEW SCHEDULES</button>
+                </td>
+                <td>
+                  <button class="btn-ads">VIEW ADS</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

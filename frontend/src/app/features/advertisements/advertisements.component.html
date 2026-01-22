@@ -1,0 +1,384 @@
+<div class="dashboard-page">
+  <app-header></app-header>
+
+  <div class="dashboard-content">
+    <div class="page-title">Advertisement Management</div>
+
+    <div class="top-controls">
+      <div class="search-container">
+        <input type="text" class="search-input" placeholder="Search Advertisments..................">
+      </div>
+      <button class="add-button" (click)="openModal()">+Add</button>
+    </div>
+
+    <div class="advertisements-container">
+      <section class="advertisements-section">
+        <div class="table-wrapper">
+          
+          <table class="advertisements-table">
+            <thead>
+              <tr>
+                <th>ADDNO</th>
+                <th>ADD NAME</th>
+                <th>CATEGORY</th>
+                <th>DURATION</th>
+                <th>SCHEDULE TYPE</th>
+                <th>LOUNGE GROUPS</th>
+                <th>PRIORITY</th>
+                <th>REMARKS</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let ad of advertisements">
+                <td>{{ ad.addNo }}</td>
+                <td>{{ ad.name }}</td>
+                <td>{{ ad.category }}</td>
+                <td>{{ ad.duration }}</td>
+                <td>{{ ad.scheduleType }}</td>
+                <td>{{ ad.loungeGroups }}</td>
+                <td><span class="priority" [ngClass]="ad.priority.toLowerCase()">{{ ad.priority }}</span></td>
+                <td><span class="status" [ngClass]="ad.status.toLowerCase()">{{ ad.status }}</span></td>
+                <td class="view-icons">
+                  <span class="icon" (click)="viewAdvertisement(ad.addNo, ad.name, ad.category, ad.duration, ad.scheduleType, ad.loungeGroups, ad.priority, ad.status)">👁</span>
+                  <span class="icon" (click)="editAdvertisement(ad.addNo, ad.name, ad.category, ad.duration, ad.scheduleType, ad.loungeGroups, ad.priority, ad.status)">✎</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- Add Advertisement Modal -->
+<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <h2 class="modal-title">{{ isViewMode ? 'VIEW ADVERTISMENT' : (isEditMode ? 'EDIT ADVERTISMENT' : 'ADD NEW ADVERTISMENT') }}</h2>
+    
+    <div class="modal-content">
+      <div class="form-row">
+        <div class="form-group flex-1">
+          <label>Name</label>
+          <input type="text" class="form-input" [(ngModel)]="viewData.name" [readonly]="isViewMode">
+        </div>
+        <div class="form-group flex-1">
+          <label>File upload</label>
+          <input type="file" class="form-input file-input" accept="image/*,video/*" (change)="onFileSelected($event)" *ngIf="!isViewMode">
+          <input type="text" class="form-input" [value]="viewData.fileName || 'No file uploaded'" readonly *ngIf="isViewMode">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group flex-1">
+          <label>Lounge Group</label>
+          <div class="checkbox-group" *ngIf="!isViewMode">
+            <label class="checkbox-label">
+              <input type="checkbox"> Group A
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox"> Group B
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox"> Group C
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox"> Group D
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox"> Group E
+            </label>
+          </div>
+          <input type="text" class="form-input" [value]="viewData.loungeGroups" readonly *ngIf="isViewMode">
+        </div>
+        <div class="form-group flex-1">
+          <label>Media Category</label>
+          <select class="form-select" [(ngModel)]="viewData.category" [disabled]="isViewMode">
+            <option>Internal Branding</option>
+            <option>Commercial</option>
+            <option>Event</option>
+            <option>Seasonal</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group form-group-small">
+          <label>Media Duration</label>
+          <input type="text" class="form-input" [(ngModel)]="viewData.duration" [readonly]="isViewMode" placeholder="30s">
+        </div>
+        <div class="form-group form-group-small">
+          <label>Priority level</label>
+          <select class="form-select" [(ngModel)]="viewData.priority" [disabled]="isViewMode">
+            <option>High</option>
+            <option>Medium</option>
+            <option>Low</option>
+          </select>
+        </div>
+        <div class="form-group flex-2">
+          <label>Description</label>
+          <textarea class="form-textarea" rows="3" [(ngModel)]="viewData.description" [readonly]="true"></textarea>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group form-group-small">
+          <label>Schedule Type</label>
+          <select class="form-select" [(ngModel)]="scheduleType" (change)="onScheduleTypeChange($event)" [disabled]="isViewMode">
+            <option>Recurring</option>
+            <option>One-time</option>
+            <option>On startup</option>
+            <option>On Idle</option>
+          </select>
+        </div>
+        <div class="form-group form-group-small">
+          <label class="checkbox-label enabled-checkbox">
+            <input type="checkbox" [checked]="(isViewMode || isEditMode) ? viewData.status === 'Active' : true" [disabled]="isViewMode"> Enabled
+          </label>
+        </div>
+      </div>
+
+      <!-- Recurring Schedule Type -->
+      <div *ngIf="scheduleType === 'Recurring'" class="recurring-container">
+        <div class="form-row">
+          <div class="frequency-column">
+            <div class="form-section flex-1">
+              <h3 class="section-title">Frequency</h3>
+              <div class="form-group">
+                <label>Occurs</label>
+                <select class="form-select" [(ngModel)]="occursType" (change)="onOccursTypeChange($event)" [disabled]="isViewMode">
+                  <option>Daily</option>
+                  <option>Weekly</option>
+                  <option>Monthly</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Recurrs every</label>
+                <input type="number" class="form-input" value="1" [readonly]="isViewMode">
+              </div>
+            </div>
+
+            <div class="form-section flex-1">
+              <h3 class="section-title">Duration</h3>
+              <div class="form-group">
+                <label>Start date:</label>
+                <input type="date" class="form-input" [(ngModel)]="startDate" (ngModelChange)="updateDescription()" [readonly]="isViewMode">
+              </div>
+              <div class="form-group">
+                <label class="radio-label">
+                  <input type="radio" name="enddate" [value]="false" [(ngModel)]="noEndDate" (ngModelChange)="updateDescription()" [disabled]="isViewMode"> End date:
+                </label>
+                <input type="date" class="form-input" [(ngModel)]="endDate" (ngModelChange)="updateDescription()" [readonly]="isViewMode">
+              </div>
+              <div class="form-group">
+                <label class="radio-label">
+                  <input type="radio" name="enddate" [value]="true" [(ngModel)]="noEndDate" (ngModelChange)="updateDescription()" [disabled]="isViewMode"> No end date
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Daily Frequency -->
+          <div class="form-section flex-1" *ngIf="occursType === 'Daily'">
+            <h3 class="section-title">Daily Frequency</h3>
+            <div class="form-group">
+              <label class="radio-label">
+                <input type="radio" name="frequency" checked [disabled]="isViewMode"> Occurs once at:
+              </label>
+              <input type="time" class="form-input" [(ngModel)]="occursOnceTime" (ngModelChange)="updateDescription()" [readonly]="isViewMode">
+            </div>
+            <div class="form-group">
+              <label class="radio-label">
+                <input type="radio" name="frequency" [disabled]="isViewMode"> Occurs every:
+              </label>
+              <div class="inline-inputs">
+                <input type="number" class="form-input small" value="1" [readonly]="isViewMode">
+                <select class="form-select" [disabled]="isViewMode">
+                  <option>Hourly</option>
+                  <option>Minutes</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Starting at:</label>
+              <input type="time" class="form-input" [(ngModel)]="startingTime" (ngModelChange)="updateDescription()" [readonly]="isViewMode">
+            </div>
+            <div class="form-group">
+              <label>Ending at:</label>
+              <input type="time" class="form-input" [(ngModel)]="endingTime" (ngModelChange)="updateDescription()" [readonly]="isViewMode">
+            </div>
+          </div>
+
+          <!-- Weekly Frequency -->
+          <div class="form-section flex-1" *ngIf="occursType === 'Weekly'">
+            <h3 class="section-title">Weekly Frequency</h3>
+            <div class="form-group">
+              <label>Occurs on:</label>
+              <div class="weekday-checkboxes">
+                <label class="checkbox-label">
+                  <input type="checkbox" [disabled]="isViewMode"> Monday
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" [disabled]="isViewMode"> Tuesday
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" [disabled]="isViewMode"> Wednesday
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" [disabled]="isViewMode"> Thursday
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" [disabled]="isViewMode"> Friday
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" [disabled]="isViewMode"> Saturday
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" [disabled]="isViewMode"> Sunday
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="radio-label">
+                <input type="radio" name="weeklyFrequency" checked [disabled]="isViewMode"> Occurs once at:
+              </label>
+              <input type="time" class="form-input" value="12:00" [readonly]="isViewMode">
+            </div>
+            <div class="form-group">
+              <label class="radio-label">
+                <input type="radio" name="weeklyFrequency" [disabled]="isViewMode"> Occurs every:
+              </label>
+              <div class="inline-inputs">
+                <input type="number" class="form-input small" value="1" [readonly]="isViewMode">
+                <select class="form-select" [disabled]="isViewMode">
+                  <option>Hourly</option>
+                  <option>Minutes</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Starting at:</label>
+              <input type="time" class="form-input" value="12:00" [readonly]="isViewMode">
+            </div>
+            <div class="form-group">
+              <label>Ending at:</label>
+              <input type="time" class="form-input" value="11:59" [readonly]="isViewMode">
+            </div>
+          </div>
+
+          <!-- Monthly Frequency -->
+          <div class="form-section flex-1" *ngIf="occursType === 'Monthly'">
+            <h3 class="section-title">Monthly Frequency</h3>
+            <div class="form-group">
+              <label class="radio-label">
+                <input type="radio" name="monthlyType" checked [disabled]="isViewMode"> Day of month:
+              </label>
+              <input type="number" class="form-input" min="1" max="31" value="1" [readonly]="isViewMode" placeholder="Enter day (1-31)">
+            </div>
+            <div class="form-group">
+              <label class="radio-label">
+                <input type="radio" name="monthlyType" [disabled]="isViewMode"> The:
+              </label>
+              <div class="inline-inputs">
+                <select class="form-select" [disabled]="isViewMode">
+                  <option>First</option>
+                  <option>Second</option>
+                  <option>Third</option>
+                  <option>Fourth</option>
+                  <option>Last</option>
+                </select>
+                <select class="form-select" [disabled]="isViewMode">
+                  <option>Monday</option>
+                  <option>Tuesday</option>
+                  <option>Wednesday</option>
+                  <option>Thursday</option>
+                  <option>Friday</option>
+                  <option>Saturday</option>
+                  <option>Sunday</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="radio-label">
+                <input type="radio" name="monthlyFrequency" checked [disabled]="isViewMode"> Occurs once at:
+              </label>
+              <input type="time" class="form-input" value="12:00" [readonly]="isViewMode">
+            </div>
+            <div class="form-group">
+              <label class="radio-label">
+                <input type="radio" name="monthlyFrequency" [disabled]="isViewMode"> Occurs every:
+              </label>
+              <div class="inline-inputs">
+                <input type="number" class="form-input small" value="1" [readonly]="isViewMode">
+                <select class="form-select" [disabled]="isViewMode">
+                  <option>Hourly</option>
+                  <option>Minutes</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Starting at:</label>
+              <input type="time" class="form-input" value="12:00" [readonly]="isViewMode">
+            </div>
+            <div class="form-group">
+              <label>Ending at:</label>
+              <input type="time" class="form-input" value="11:59" [readonly]="isViewMode">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- One-time Schedule Type -->
+      <div *ngIf="scheduleType === 'One-time'">
+        <div class="form-section">
+          <h3 class="section-title">Schedule date and Time</h3>
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label>Schedule date:</label>
+              <input type="date" class="form-input" value="2026-01-16" [readonly]="isViewMode">
+            </div>
+            <div class="form-group flex-1">
+              <label>Schedule time:</label>
+              <input type="time" class="form-input" value="00:00" [readonly]="isViewMode">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- On startup Schedule Type -->
+      <div *ngIf="scheduleType === 'On startup'">
+        <div class="form-section">
+          <h3 class="section-title">Schedule Date and Time</h3>
+          <div class="info-box">
+            <strong>Info:</strong> This ad will trigger automatically as soon as the lounge display software boots up.
+          </div>
+          <div class="form-group">
+            <label class="checkbox-label force-play-checkbox">
+              <input type="checkbox" checked [disabled]="isViewMode"> Force play before any other scheduled ads
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- On Idle Schedule Type -->
+      <div *ngIf="scheduleType === 'On Idle'">
+        <div class="form-section">
+          <h3 class="section-title">Schedule Date and Time</h3>
+          <div class="info-box">
+            <strong>Info:</strong> This ad acts as "Filler." It will play only when the system has no other ads scheduled to run.
+          </div>
+          <div class="form-group">
+            <label>Max idle loop duration (minutes):</label>
+            <input type="number" class="form-input" value="60" style="width: 100px;" [readonly]="isViewMode">
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-save" (click)="saveAdvertisement()" *ngIf="!isViewMode">Save</button>
+        <button class="btn-cancel" (click)="closeModal()">{{ isViewMode ? 'Close' : 'Cancel' }}</button>
+      </div>
+    </div>
+  </div>
+</div>
