@@ -5,7 +5,7 @@
     <div class="page-title">Bus Schedule & Advertising</div>
 
     <div class="search-container">
-      <input type="text" class="search-input" placeholder="Search Advertisments..................">
+      <input type="text" class="search-input" placeholder="Search Advertisments.................." [(ngModel)]="searchTerm">
     </div>
 
     <div class="lounge-container">
@@ -23,7 +23,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let lounge of lounges">
+              <tr *ngFor="let lounge of filteredLounges">
                 <td>{{ lounge.id }}</td>
                 <td>{{ lounge.name }}</td>
                 <td>{{ lounge.district }}</td>

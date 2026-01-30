@@ -17,6 +17,8 @@ export class AdvertisementsComponent {
   selectedFile: File | null = null;
   scheduleType: string = 'Recurring';
   occursType: string = 'Daily';
+  searchTerm: string = '';
+  isEmergencyCategory: boolean = false;
   
   // Form values for description
   occursOnceTime: string = '12:00';
@@ -34,6 +36,22 @@ export class AdvertisementsComponent {
     { addNo: 'Add-05', name: 'Chrismass', category: 'Seasonal', duration: '30s', scheduleType: 'Recurring', loungeGroups: 'Group E', priority: 'Low', status: 'Paused' }
   ];
   
+  get filteredAdvertisements() {
+    if (!this.searchTerm.trim()) {
+      return this.advertisements;
+    }
+    const term = this.searchTerm.toLowerCase();
+    return this.advertisements.filter(ad => 
+      ad.addNo.toLowerCase().includes(term) ||
+      ad.name.toLowerCase().includes(term) ||
+      ad.category.toLowerCase().includes(term) ||
+      ad.scheduleType.toLowerCase().includes(term) ||
+      ad.loungeGroups.toLowerCase().includes(term) ||
+      ad.priority.toLowerCase().includes(term) ||
+      ad.status.toLowerCase().includes(term)
+    );
+  }
+  
   viewData: any = {
     addNo: '',
     name: '',
@@ -50,12 +68,14 @@ export class AdvertisementsComponent {
   openModal() {
     this.isViewMode = false;
     this.isEditMode = false;
+    this.isEmergencyCategory = false;
     this.showModal = true;
   }
 
   viewAdvertisement(addNo: string, name: string, category: string, duration: string, scheduleType: string, loungeGroups: string, priority: string, status: string) {
     this.isViewMode = true;
     this.isEditMode = false;
+    this.isEmergencyCategory = category === 'Emergency';
     this.viewData = {
       addNo,
       name,
@@ -76,6 +96,7 @@ export class AdvertisementsComponent {
   editAdvertisement(addNo: string, name: string, category: string, duration: string, scheduleType: string, loungeGroups: string, priority: string, status: string) {
     this.isViewMode = false;
     this.isEditMode = true;
+    this.isEmergencyCategory = category === 'Emergency';
     this.viewData = {
       addNo,
       name,
@@ -126,6 +147,19 @@ export class AdvertisementsComponent {
     this.updateDescription();
   }
 
+  onCategoryChange(event: Event) {
+    const select = event.target as HTMLSelectElement;
+    this.viewData.category = select.value;
+    this.isEmergencyCategory = select.value === 'Emergency';
+    
+    if (this.isEmergencyCategory) {
+      // Auto-set emergency defaults
+      this.viewData.priority = 'High';
+      this.scheduleType = 'On startup';
+      this.updateDescription();
+    }
+  }
+
   onOccursTypeChange(event: Event) {
     const select = event.target as HTMLSelectElement;
     this.occursType = select.value;
@@ -134,6 +168,13 @@ export class AdvertisementsComponent {
 
   updateDescription() {
     let description = '';
+    
+    // Emergency category override
+    if (this.isEmergencyCategory) {
+      description = '⚠️ EMERGENCY BROADCAST: This message will be displayed immediately on all selected lounge screens with highest priority. It will trigger automatically when the lounge display software boots up.';
+      this.viewData.description = description;
+      return;
+    }
     
     if (this.scheduleType === 'Recurring') {
       // Format time to 12-hour format with AM/PM

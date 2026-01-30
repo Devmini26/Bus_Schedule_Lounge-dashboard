@@ -6,7 +6,7 @@
 
     <div class="top-controls">
       <div class="search-container">
-        <input type="text" class="search-input" placeholder="Search Advertisments..................">
+        <input type="text" class="search-input" placeholder="Search Advertisments.................." [(ngModel)]="searchTerm">
       </div>
       <button class="add-button" (click)="openModal()">+Add</button>
     </div>
@@ -30,7 +30,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let ad of advertisements">
+              <tr *ngFor="let ad of filteredAdvertisements">
                 <td>{{ ad.addNo }}</td>
                 <td>{{ ad.name }}</td>
                 <td>{{ ad.category }}</td>
@@ -55,7 +55,21 @@
 <!-- Add Advertisement Modal -->
 <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
   <div class="modal-container" (click)="$event.stopPropagation()">
-    <h2 class="modal-title">{{ isViewMode ? 'VIEW ADVERTISMENT' : (isEditMode ? 'EDIT ADVERTISMENT' : 'ADD NEW ADVERTISMENT') }}</h2>
+    <h2 class="modal-title" [style.background-color]="isEmergencyCategory ? '#ff4444' : ''">
+      {{ isViewMode ? 'VIEW ADVERTISMENT' : (isEditMode ? 'EDIT ADVERTISMENT' : 'ADD NEW ADVERTISMENT') }}
+      <span *ngIf="isEmergencyCategory" style="margin-left: 10px;">⚠️ EMERGENCY BROADCAST</span>
+    </h2>
+    
+    <!-- Emergency Alert Banner -->
+    <div *ngIf="isEmergencyCategory && !isViewMode" style="background: #fff3cd; border: 2px solid #ff4444; padding: 15px; margin-bottom: 20px; border-radius: 8px;">
+      <p style="margin: 0; color: #856404; font-weight: bold;">
+        ⚠️ EMERGENCY MODE ACTIVATED
+      </p>
+      <p style="margin: 5px 0 0 0; color: #856404; font-size: 13px;">
+        This advertisement will be broadcast immediately to selected lounge groups with highest priority. 
+        Recommendation: Select all lounge groups for maximum reach during emergencies.
+      </p>
+    </div>
     
     <div class="modal-content">
       <div class="form-row">
@@ -72,7 +86,7 @@
 
       <div class="form-row">
         <div class="form-group flex-1">
-          <label>Lounge Group</label>
+          <label>Lounge Group <span *ngIf="isEmergencyCategory" style="color: #ff4444; font-size: 12px;">(Recommended: Select all groups for emergency)</span></label>
           <div class="checkbox-group" *ngIf="!isViewMode">
             <label class="checkbox-label">
               <input type="checkbox"> Group A
@@ -94,11 +108,12 @@
         </div>
         <div class="form-group flex-1">
           <label>Media Category</label>
-          <select class="form-select" [(ngModel)]="viewData.category" [disabled]="isViewMode">
+          <select class="form-select" [(ngModel)]="viewData.category" (change)="onCategoryChange($event)" [disabled]="isViewMode">
             <option>Internal Branding</option>
             <option>Commercial</option>
             <option>Event</option>
             <option>Seasonal</option>
+            <option>Emergency</option>
           </select>
         </div>
       </div>
@@ -109,8 +124,8 @@
           <input type="text" class="form-input" [(ngModel)]="viewData.duration" [readonly]="isViewMode" placeholder="30s">
         </div>
         <div class="form-group form-group-small">
-          <label>Priority level</label>
-          <select class="form-select" [(ngModel)]="viewData.priority" [disabled]="isViewMode">
+          <label>Priority level <span *ngIf="isEmergencyCategory" style="color: #ff4444; font-size: 12px;">(Auto-set for Emergency)</span></label>
+          <select class="form-select" [(ngModel)]="viewData.priority" [disabled]="isViewMode || isEmergencyCategory">
             <option>High</option>
             <option>Medium</option>
             <option>Low</option>
@@ -124,8 +139,8 @@
 
       <div class="form-row">
         <div class="form-group form-group-small">
-          <label>Schedule Type</label>
-          <select class="form-select" [(ngModel)]="scheduleType" (change)="onScheduleTypeChange($event)" [disabled]="isViewMode">
+          <label>Schedule Type <span *ngIf="isEmergencyCategory" style="color: #ff4444; font-size: 12px;">(Emergency: Immediate Display)</span></label>
+          <select class="form-select" [(ngModel)]="scheduleType" (change)="onScheduleTypeChange($event)" [disabled]="isViewMode || isEmergencyCategory">
             <option>Recurring</option>
             <option>One-time</option>
             <option>On startup</option>
@@ -197,6 +212,7 @@
                 <select class="form-select" [disabled]="isViewMode">
                   <option>Hourly</option>
                   <option>Minutes</option>
+                  <option>Secs</option>
                 </select>
               </div>
             </div>

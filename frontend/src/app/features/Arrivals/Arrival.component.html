@@ -5,15 +5,13 @@
     <div class="page-title">Arrival Management</div>
 
     <div class="search-container">
-      <input type="text" class="search-input" placeholder="Search Arrivals by lounge">
+      <input type="text" class="search-input" placeholder="Search Arrivals by lounge" [(ngModel)]="searchTerm">
     </div>
 
     <div class="lounges-container">
-      <!-- COLOMBO PREMIUM LOUNGE -->
-      <section class="lounge-section">
-        <h2 class="lounge-title">COLOMBO PERMIUM LOUNG</h2>
+      <section class="lounge-section" *ngFor="let lounge of filteredLounges">
+        <h2 class="lounge-title">{{ lounge.name }}</h2>
         <div class="table-wrapper">
-          
           <table class="arrivals-table">
             <thead>
               <tr>
@@ -25,152 +23,12 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>12:55</td>
-                <td>A-093</td>
-                <td>R-210</td>
-                <td>Kandy</td>
-                <td><span class="status arrived">ARRIVED AT 13.00</span></td>
-              </tr>
-              <tr class="active-row">
-                <td><span class="indicator"></span>13:10</td>
-                <td>A-041</td>
-                <td>R-176</td>
-                <td>Colombo</td>
-                <td><span class="status expected">EXPECTED AT 13.15</span></td>
-              </tr>
-              <tr class="active-row">
-                <td><span class="indicator"></span>13:20</td>
-                <td>A-112</td>
-                <td>R-289</td>
-                <td>Matara</td>
-                <td><span class="status expected">EXPECTED AT 13.22</span></td>
-              </tr>
-              <tr class="active-row">
-                <td><span class="indicator"></span>13:45</td>
-                <td>A-222</td>
-                <td>R-134</td>
-                <td>Jaffna</td>
-                <td><span class="status delayed">DELAYED</span></td>
-              </tr>
-              <tr>
-                <td>14:00</td>
-                <td>A-303</td>
-                <td>R-412</td>
-                <td>Negombo</td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- COLOMBO PREMIUM LOUNGE -->
-      <section class="lounge-section">
-        <h2 class="lounge-title">DMM LOUNGE</h2>
-        <div class="table-wrapper">
-          
-          <table class="arrivals-table">
-            <thead>
-              <tr>
-                <th>TIME</th>
-                <th>BUS NO</th>
-                <th>ROUTE NUMBER</th>
-                <th>ORIGIN</th>
-                <th>REMARKS</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>12:55</td>
-                <td>A-099</td>
-                <td>R-210</td>
-                <td>Matale</td>
-                <td><span class="status arrived">ARRIVED AT 13.00</span></td>
-              </tr>
-              <tr class="active-row">
-                <td><span class="indicator"></span>13:10</td>
-                <td>A-042</td>
-                <td>R-176</td>
-                <td>Colombo</td>
-                <td><span class="status expected">EXPECTED AT 13.15</span></td>
-              </tr>
-              <tr class="active-row">
-                <td><span class="indicator"></span>13:20</td>
-                <td>A-115</td>
-                <td>R-289</td>
-                <td>Galle</td>
-                <td><span class="status expected">EXPECTED AT 13.22</span></td>
-              </tr>
-              <tr class="active-row">
-                <td><span class="indicator"></span>13:45</td>
-                <td>A-220</td>
-                <td>R-134</td>
-                <td>Jaffna</td>
-                <td><span class="status delayed">DELAYED</span></td>
-              </tr>
-              <tr>
-                <td>14:00</td>
-                <td>A-305</td>
-                <td>R-412</td>
-                <td>Kaluthara</td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- DMM LOUNGE -->
-      <section class="lounge-section">
-        <h2 class="lounge-title">ARALIYA LOUNGE</h2>
-        <div class="table-wrapper">
-          
-          <table class="arrivals-table">
-            <thead>
-              <tr>
-                <th>TIME</th>
-                <th>BUS NO</th>
-                <th>ROUTE NUMBER</th>
-                <th>ORIGIN</th>
-                <th>REMARKS</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>12:55</td>
-                <td>A-090</td>
-                <td>R-210</td>
-                <td>Jaffna</td>
-                <td><span class="status arrived">ARRIVED AT 13.00</span></td>
-              </tr>
-              <tr class="active-row">
-                <td><span class="indicator"></span>13:10</td>
-                <td>A-040</td>
-                <td>R-176</td>
-                <td>Negombo</td>
-                <td><span class="status expected">EXPECTED AT 13.15</span></td>
-              </tr>
-              <tr class="active-row">
-                <td><span class="indicator"></span>13:20</td>
-                <td>A-115</td>
-                <td>R-289</td>
-                <td>Kurunegala</td>
-                <td><span class="status expected">EXPECTED AT 13.22</span></td>
-              </tr>
-              <tr class="active-row">
-                <td><span class="indicator"></span>13:45</td>
-                <td>A-225</td>
-                <td>R-134</td>
-                <td>Galle</td>
-                <td><span class="status delayed">DELAYED</span></td>
-              </tr>
-              <tr>
-                <td>14:00</td>
-                <td>A-306</td>
-                <td>R-412</td>
-                <td>Negombo</td>
-                <td></td>
+              <tr *ngFor="let arrival of lounge.arrivals" [class.active-row]="arrival.active">
+                <td><span *ngIf="arrival.active" class="indicator"></span>{{ arrival.time }}</td>
+                <td>{{ arrival.busNo }}</td>
+                <td>{{ arrival.routeNumber }}</td>
+                <td>{{ arrival.origin }}</td>
+                <td><span *ngIf="arrival.statusText" class="status" [ngClass]="arrival.status">{{ arrival.statusText }}</span></td>
               </tr>
             </tbody>
           </table>
